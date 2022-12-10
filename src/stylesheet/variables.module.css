@@ -1,0 +1,9 @@
+:root {
+    --form-bg: #e0cfcf;
+    --padding-form: 15px;
+    --input-bg: #f8f5f5;
+    --bg-btn: rgb(93, 73, 191);
+    --bg-btn-hover: rgb(77, 55, 184);
+    --color-btn: white;
+    --font-size: 18px;
+  }

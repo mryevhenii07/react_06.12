@@ -1,0 +1,18 @@
+.form{
+    width: 500px;
+    min-height: 300px;
+    margin: 20px auto;
+    background-color: var(--form-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--padding-form);
+    border-radius: 10px;
+  }
+  
+  .wrapBtn{
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
