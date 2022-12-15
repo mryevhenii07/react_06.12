@@ -6,4 +6,7 @@
     --bg-btn-hover: rgb(77, 55, 184);
     --color-btn: white;
     --font-size: 18px;
+    --font-size-btn: 14px;
+    --error-color: red;
+    --color-title: rgb(75, 66, 66);
   }

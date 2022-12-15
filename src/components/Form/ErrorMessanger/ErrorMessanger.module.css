@@ -1,0 +1,10 @@
+.errorMsg {
+    text-align: left;
+    font-size: 12px;
+    margin-top: 3px;
+    color: var(--error-color);
+    width: 230px;
+    margin-right: 180px;
+    margin-top: -15px;
+  }
+  
