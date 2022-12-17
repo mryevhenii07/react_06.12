@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { useState } from 'react';
 import Input from './Input/Input';
 import ErrorMessage from './ErrorMessanger/ErrorMessanger';
 import Header from '../Header/Header';
@@ -26,15 +26,10 @@ const INITIAL_STATE = {
   projectError: '',
 };
 
-class Form extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...INITIAL_STATE,
-    };
-  }
+const Form = ({ onSubmit }) => {
+  const [data, setData] = useState(INITIAL_STATE);
 
-  handleChangeInput = (name, e) => {
+  const handleChangeInput = (name, e) => {
     let value = e.target.value;
 
     if (name === 'phone') {
@@ -47,16 +42,16 @@ class Form extends PureComponent {
         .filter((item) => item !== '')
         .join('-');
 
-      this.setState({ [e.target.name]: value });
+      setData((data) => ({ ...data, [e.target.name]: value }));
     } else {
-      this.setState({ [name]: value });
+      setData((data) => ({ ...data, [e.target.name]: value }));
     }
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const state = { ...this.state };
+    const state = { ...data };
 
     let isError = false;
 
@@ -142,11 +137,11 @@ class Form extends PureComponent {
     }
 
     if (isError) {
-      this.setState(state);
+      setData(state);
     } else {
       let { firstName, lastName, birthday, phone, website, about, skills, lastProject } = state;
 
-      this.props.onSubmit({
+      onSubmit({
         firstName,
         lastName,
         birthday,
@@ -159,236 +154,105 @@ class Form extends PureComponent {
     }
   };
 
-  reset = () => {
-    this.setState({ ...INITIAL_STATE });
+  const reset = () => {
+    setData({ ...INITIAL_STATE });
   };
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  render() {
-    return (
-      <div className={s.container}>
-        <div className={s.wrap}>
-          <div className={s.contentWrap}>
-            <Header text="Create a questionnaire" />
-            {/* <img src={rocket} className={s.image} alt="rocket" /> */}
-          </div>
+  return (
+    <div className={s.container}>
+      <div className={s.wrap}>
+        <div className={s.contentWrap}>
+          <Header text="Create a questionnaire" />
         </div>
-
-        <form className={s.form}>
-          <Input
-            label="Name"
-            name="firstName"
-            value={this.state.firstName}
-            placeholder="Example: Yevhenii  "
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.nameError} />
-
-          <Input
-            label="Last Name"
-            name="lastName"
-            value={this.state.lastName}
-            placeholder="Example: Peredrii"
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.surnameError} />
-
-          <Input
-            label="Birthday"
-            type="date"
-            name="birthday"
-            value={this.state.birthday}
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.birthdayError} />
-
-          <Input
-            label="Phone"
-            type="tel"
-            name="phone"
-            value={this.state.phone}
-            placeholder="Example: X-XXXX-XX-XX"
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.phoneError} />
-
-          <Input
-            label="Website"
-            name="website"
-            value={this.state.website}
-            placeholder="Example: http://website.com"
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.websiteError} />
-
-          <TextArea
-            label="About"
-            name="about"
-            value={this.state.about}
-            rows={7}
-            placeholder="Write a little about yourself..."
-            maxLength={600}
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.aboutError} />
-
-          <TextArea
-            label="Skills"
-            name="skills"
-            value={this.state.skills}
-            rows={7}
-            placeholder="List the stack of technologies you own..."
-            maxLength={600}
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.skillsError} />
-
-          <TextArea
-            label="Last the project"
-            name="lastProject"
-            value={this.state.lastProject}
-            rows={7}
-            placeholder="Describe your latest project..."
-            maxLength={600}
-            onChange={this.handleChangeInput}
-          />
-          <ErrorMessage error={this.state.projectError} />
-
-          <div className={s.buttonWrapper}>
-            <Button text="Отменить" type="button" onClick={this.reset} />
-            <Button text="Сохранить" type="button" onClick={this.handleSubmit} />
-          </div>
-        </form>
       </div>
-    );
-  }
-}
+
+      <form className={s.form}>
+        <Input
+          label="Name"
+          name="firstName"
+          value={data.firstName}
+          placeholder="Example: Yevhenii"
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.nameError} />
+
+        <Input
+          label="Last Name"
+          name="lastName"
+          value={data.lastName}
+          placeholder="Example: Peredrii"
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.surnameError} />
+
+        <Input
+          label="Birthday"
+          type="date"
+          name="birthday"
+          value={data.birthday}
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.birthdayError} />
+
+        <Input
+          label="Phone"
+          type="tel"
+          name="phone"
+          value={data.phone}
+          placeholder="Example: X-XXXX-XX-XX"
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.phoneError} />
+
+        <Input
+          label="Website"
+          name="website"
+          value={data.website}
+          placeholder="Example: http://website.com"
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.websiteError} />
+
+        <TextArea
+          label="About"
+          name="about"
+          value={data.about}
+          rows={7}
+          placeholder="Write a little about yourself..."
+          maxLength={600}
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.aboutError} />
+
+        <TextArea
+          label="Skills"
+          name="skills"
+          value={data.skills}
+          rows={7}
+          placeholder="List the stack of technologies you own..."
+          maxLength={600}
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.skillsError} />
+
+        <TextArea
+          label="Last the project"
+          name="lastProject"
+          value={data.lastProject}
+          rows={7}
+          placeholder="Describe your latest project..."
+          maxLength={600}
+          onChange={handleChangeInput}
+        />
+        <ErrorMessage error={data.projectError} />
+
+        <div className={s.buttonWrapper}>
+          <Button text="Cancel" type="button" onClick={reset} />
+          <Button text="Save" type="button" onClick={handleSubmit} />
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default Form;
-// import { PureComponent } from 'react';
-// import FirstName from '../FirstName/FirstName';
-// import LastName from '../LastName/LastName';
-// import Birthday from '../Birthday/Birthday';
-// import Phone from '../Phone/Phone';
-// import Website from '../Website/Website';
-// import About from '../About/About';
-// import Skills from '../Skills/Skills';
-// import DescriptionLastProject from '../DescriptionLastProject/DescriptionLastProject';
-// import Cancel from '../Cancel/Cancel';
-// import Save from '../Save/Save';
-// import s from './Form.module.css';
-
-// class Form extends PureComponent {
-//   state = {
-//     firstName: '',
-//     lastName: '',
-//     birthday: '',
-//     phone: '',
-//     website: 'https://',
-//     about: '',
-//     skills: '',
-//     lastProject: '',
-//     // errorLength: 'ww',
-
-//     nameError: '',
-//   };
-
-//   handleChange = (e) => {
-//     const { name, value } = e.currentTarget;
-//     this.setState({
-//       [name]: value,
-//     });
-//   };
-
-//   handleSave = (e) => {
-//     e.preventDefault();
-//     this.props.formSafeHandler(this.state);
-//     const state = { ...this.state };
-
-//     let isError = false;
-
-//     for (const [key, value] of Object.entries(state)) {
-//       state[key] = value.trim();
-//     }
-
-//     if (state.name === '') {
-//       state.nameError = 'Поле обязательное для заполнения';
-//       isError = true;
-//     } else if (state.name.charAt(0) !== state.name.charAt(0).toUpperCase()) {
-//       state.nameError = 'Имя должно начинаться с большой буквы';
-//       isError = true;
-//     } else {
-//       state.nameError = '';
-//     }
-
-//     // if (this.state.firstName === '') {
-//     //   this.setState({ errorLength: 'The field is empty!' });
-//     //   console.log(this.state.errorLength);
-//     //   console.log(this.state.firstName);
-//     //   // this.setState((prevState) => ({ errorLength: prevState.errorLength }));
-//     // }
-//     // setTimeout(() => {
-//     //   console.log(this.state.errorLength);
-//     // }, 1000);
-//   };
-
-//   reset = () => {
-//     this.setState({
-//       firstName: '',
-//       lastName: '',
-//       birthday: '',
-//       phone: '',
-//       website: 'https://',
-//       about: '',
-//       skills: '',
-//       lastProject: '',
-//     });
-//   };
-//   render() {
-//     const {
-//       firstName,
-//       lastName,
-//       birthday,
-//       phone,
-//       website,
-//       about,
-//       skills,
-//       lastProject,
-//       // errorLength,
-//       nameError,
-//     } = this.state;
-
-//     const { handleChange, handleSave, reset } = this;
-
-//     return (
-//       <form className={s.form} onSubmit={handleSave}>
-//         <h1>Creating a questionnaire </h1>
-
-//         <FirstName
-//           firstName={firstName}
-//           handelChange={handleChange}
-//           // errorLength={errorLength}
-//           nameError={nameError}
-//         />
-//         <LastName lastName={lastName} handelChange={handleChange} />
-//         <Birthday birthday={birthday} handelChange={handleChange} />
-//         <Phone phone={phone} handelChange={handleChange} />
-//         <Website website={website} handelChange={handleChange} />
-//         <About about={about} handelChange={handleChange} />
-//         <Skills skills={skills} handelChange={handleChange} />
-//         <DescriptionLastProject lastProject={lastProject} handelChange={handleChange} />
-
-//         <div className={s.wrapBtn}>
-//           <Cancel reset={reset} />
-//           <Save />
-//         </div>
-//       </form>
-//     );
-//   }
-// }
-
-// export default Form;

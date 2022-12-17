@@ -1,13 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-class Container extends Component {
-  render() {
-    const { children } = this.props;
-
-    return <div>{children}</div>;
-  }
-}
+const Container = ({ children }) => {
+  return <div>{children}</div>;
+};
 
 Container.propTypes = {
   children: PropTypes.node.isRequired,
